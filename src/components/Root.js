@@ -2,24 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Root extends Component {
-  static defaultProps = {
+  static defaultProps = {};
 
-  };
+  static propTypes = {};
 
-  static propTypes = {
-
-  };
-
-  state = {
-
-  };
+  state = {};
 
   render() {
-    return (
-      <div>
-          Hello
-      </div>
-    );
+    return <div>Hello</div>;
   }
 }
 

@@ -1,3 +1,3 @@
-import Root from 'Root'
+import Root from 'Root';
 
-export {Root}
+export { Root };
