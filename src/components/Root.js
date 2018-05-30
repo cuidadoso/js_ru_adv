@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
+
+import { AuthPage, AdminPage } from './routes';
 
 class Root extends Component {
   static defaultProps = {};
@@ -9,7 +12,12 @@ class Root extends Component {
   state = {};
 
   render() {
-    return <div>Hello</div>;
+    return (
+      <div>
+        <Route path="/admin" component={AdminPage} />
+        <Route path="/auth" component={AuthPage} />
+      </div>
+    );
   }
 }
 

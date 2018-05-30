@@ -7,7 +7,10 @@ import history from '../history';
 
 const enhancer = applyMiddleware(routerMiddleware(history), thunk, logger);
 
-const store = createStore(reducer, enhancer);
+const reduxDevTools =
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(); // dev only
+
+const store = createStore(reducer, reduxDevTools, enhancer);
 window.store = store; // dev only
 
 export default store;
