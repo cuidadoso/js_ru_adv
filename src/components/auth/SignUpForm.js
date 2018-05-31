@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
+import { validate as emailValidator } from 'email-validator';
+
+import ErrorField from '../common/ErrorField';
+
+const validate = ({ email, password }) => {
+  const errors = {};
+
+  if (!email) errors.email = 'email is required';
+  else if (!emailValidator(email)) errors.email = 'email not valid';
+
+  if (!password) errors.password = 'password is required';
+  else if (password.length < 8) errors.password = 'to short';
+
+  return errors;
+};
 
 class SignUpForm extends Component {
   static defaultProps = {};
@@ -15,14 +30,8 @@ class SignUpForm extends Component {
       <div>
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Email</label>
-            <Field name="email" component="input" />
-          </div>
-          <div>
-            <label>Password</label>
-            <Field name="password" component="input" type="password" />
-          </div>
+          <Field name="email" component={ErrorField} />
+          <Field name="password" component={ErrorField} type="password" />
           <div>
             <input type="submit" />
           </div>
@@ -33,5 +42,6 @@ class SignUpForm extends Component {
 }
 
 export default reduxForm({
-  form: 'auth'
+  form: 'auth',
+  validate
 })(SignUpForm);

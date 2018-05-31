@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { SignInForm, SignUpForm } from '../auth';
+import { signUp, moduleName } from '../../ducks/auth';
+import Loader from '../common/Loader';
 
 class AuthPage extends Component {
   static defaultProps = {};
 
-  static propTypes = {};
+  static propTypes = {
+    // from connect
+    loading: PropTypes.bool,
+    signUp: PropTypes.func
+  };
 
   state = {};
 
@@ -15,11 +22,10 @@ class AuthPage extends Component {
     console.log('---', values);
   };
 
-  handleSignUp = (values) => {
-    console.log('---', values);
-  };
+  handleSignUp = (email, password) => this.props.signUp(email, password);
 
   render() {
+    const { loading } = this.props;
     return (
       <div>
         <h3>Auth page</h3>
@@ -37,9 +43,15 @@ class AuthPage extends Component {
           path="/auth/signup"
           render={() => <SignUpForm onSubmit={this.handleSignUp} />}
         />
+        {loading && <Loader />}
       </div>
     );
   }
 }
 
-export default AuthPage;
+export default connect(
+  (state) => ({
+    loading: state[moduleName].loading
+  }),
+  { signUp }
+)(AuthPage);

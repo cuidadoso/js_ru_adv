@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { validate as emailValidator } from 'email-validator';
 
-import ErrorField from './ErrorField';
+import ErrorField from '../common/ErrorField';
 
 const validate = ({ email, password }) => {
   const errors = {};
