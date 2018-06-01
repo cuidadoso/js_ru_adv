@@ -6,7 +6,7 @@ import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 
 import history from '../history';
-import { saga } from '../ducks/people';
+import rootSaga from './saga';
 
 const sagaMiddleware = createSagaMiddleware();
 const enhancer = applyMiddleware(
@@ -22,6 +22,6 @@ const reduxDevTools =
 const store = createStore(reducer, reduxDevTools, enhancer);
 window.store = store; // dev only
 
-sagaMiddleware.run(saga);
+sagaMiddleware.run(rootSaga);
 
 export default store;
