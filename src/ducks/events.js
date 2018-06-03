@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import firebase from 'firebase';
 
 import { appName, FAIL, REQUEST, SUCCESS } from '../config';
+import { fbDataToEntities, mapToArr } from './utils';
 
 /**
  * Constants
@@ -21,6 +22,16 @@ export const ReducerRecord = Record({
   error: null
 });
 
+export const EventRecord = Record({
+  uid: null,
+  title: null,
+  url: null,
+  where: null,
+  when: null,
+  month: null,
+  submissionDeadline: null
+});
+
 export default function reducer(state = new ReducerRecord(), action) {
   const { type, payload, error } = action;
 
@@ -35,7 +46,7 @@ export default function reducer(state = new ReducerRecord(), action) {
         .set('loading', false)
         .set('loaded', true)
         .set('error', null)
-        .set('entities', new OrderedMap(payload));
+        .set('entities', fbDataToEntities(payload, EventRecord));
     case FETCH_ALL + FAIL:
       return state
         .set('loading', false)
@@ -49,11 +60,14 @@ export default function reducer(state = new ReducerRecord(), action) {
 /**
  * Selectors
  */
-const eventsGetter = (state) => state.events.entities;
-
-export const eventsSelector = createSelector(eventsGetter, (events) => {
-  // return mapToArr(events);
-});
+export const stateSelector = (state) => state[moduleName];
+export const entitiesSelector = createSelector(
+  stateSelector,
+  (state) => state.entities
+);
+export const eventListSelector = createSelector(entitiesSelector, (entities) =>
+  mapToArr(entities)
+);
 
 /**
  * Action creators
