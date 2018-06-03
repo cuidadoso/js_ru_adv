@@ -45,12 +45,11 @@ export class EventList extends Component {
     );
   };
 
-  handleRowClick = (uid) => {
+  handleRowClick = (uid) => () => {
     const { selectEvent } = this.props;
     selectEvent && selectEvent(uid);
   };
 
-  // TODO fix select event
   render() {
     if (this.props.loading) return <Loader />;
     return (
