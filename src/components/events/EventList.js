@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { moduleName, fetchAll, eventListSelector } from '../../ducks/events';
+import {
+  moduleName,
+  fetchAll,
+  eventListSelector,
+  selectEvent
+} from '../../ducks/events';
 import Loader from '../common/Loader';
 
 export class EventList extends Component {
@@ -13,11 +18,11 @@ export class EventList extends Component {
   };
 
   static propTypes = {
-    selectEvent: PropTypes.func,
     // from connect
     events: PropTypes.array,
     loading: PropTypes.bool,
-    fetchAll: PropTypes.func
+    fetchAll: PropTypes.func,
+    selectEvent: PropTypes.func
   };
 
   state = {};
@@ -45,6 +50,7 @@ export class EventList extends Component {
     selectEvent && selectEvent(uid);
   };
 
+  // TODO fix select event
   render() {
     if (this.props.loading) return <Loader />;
     return (
@@ -66,5 +72,5 @@ export default connect(
     events: eventListSelector(state),
     loading: state[moduleName].loading
   }),
-  { fetchAll }
+  { fetchAll, selectEvent }
 )(EventList);
