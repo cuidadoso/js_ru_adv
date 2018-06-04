@@ -21,7 +21,7 @@ export const ADD_PERSON_REQUEST = `${prefix}/ADD_PERSON_REQUEST`;
 export const ADD_PERSON = `${prefix}/ADD_PERSON`;
 
 export default function reducer(state = new ReducerState(), action) {
-  const { type, payload, error } = action;
+  const { type, payload } = action;
 
   switch (type) {
     case ADD_PERSON:

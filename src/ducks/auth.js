@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { Record } from 'immutable';
 import { all, cps, call, put, take, takeEvery } from 'redux-saga/effects';
 // import store from '../redux'
@@ -71,7 +72,7 @@ export const signUpSaga = function*() {
     const action = yield take(SIGN_UP_REQUEST);
 
     try {
-      const user = yield call(
+      /*const user =*/ yield call(
         [auth, auth.createUserWithEmailAndPassword],
         action.payload.email,
         action.payload.password

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { validate as emailValidator } from 'email-validator';
 
@@ -18,12 +17,6 @@ const validate = ({ email, password }) => {
 };
 
 class SignInForm extends Component {
-  static defaultProps = {};
-
-  static propTypes = {};
-
-  state = {};
-
   render() {
     const { handleSubmit } = this.props;
     return (

@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 export const appName = 'js-ru-adv';
 export const firebaseCongig = {

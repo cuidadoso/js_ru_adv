@@ -1,7 +1,8 @@
 import { all, take, call, put } from 'redux-saga/effects';
 import { Record, OrderedMap, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 import { appName, FAIL, REQUEST, SUCCESS } from '../config';
 import { fbDataToEntities, mapToArr } from './utils';

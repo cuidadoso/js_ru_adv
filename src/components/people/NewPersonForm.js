@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { validate as emailValidator } from 'email-validator';
 
@@ -17,12 +16,6 @@ function validate({ firstName, email }) {
 }
 
 class NewPersonForm extends Component {
-  static defaultProps = {};
-
-  static propTypes = {};
-
-  state = {};
-
   render() {
     const { handleSubmit } = this.props;
     return (

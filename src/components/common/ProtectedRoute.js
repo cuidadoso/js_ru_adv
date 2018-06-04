@@ -6,11 +6,14 @@ import { moduleName } from '../../ducks/auth';
 import UnAuthorized from './UnAuthorized';
 
 class ProtectedRoute extends Component {
-  static defaultProps = {};
+  static defaultProps = {
+    authorized: false
+  };
 
-  static propTypes = {};
-
-  state = {};
+  static propTypes = {
+    // from connect
+    authorized: PropTypes.bool
+  };
 
   renderProtected = (routeProps) => {
     const { component: ProtectedComponent, authorized } = this.props;
