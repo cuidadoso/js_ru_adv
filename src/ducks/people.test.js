@@ -1,4 +1,9 @@
-import { addPersonSaga, ADD_PERSON, ADD_PERSON_REQUEST } from './people';
+import {
+  addPersonSaga,
+  ADD_PERSON,
+  ADD_PERSON_REQUEST,
+  ADD_PERSON_SUCCESS
+} from './people';
 import { call, put } from 'redux-saga/effects';
 
 import { generateId } from './utils';
@@ -20,8 +25,8 @@ it('should dispatch person with id', () => {
 
   expect(saga.next({ id }).value).toEqual(
     put({
-      type: ADD_PERSON,
-      payload: { id, ...person }
+      type: ADD_PERSON_SUCCESS,
+      payload: { uuid: id, ...person }
     })
   );
 });
