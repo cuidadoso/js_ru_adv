@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
+import { DropTarget } from 'react-dnd';
 
 class SelectedEventCard extends Component {
   render() {
-    const { title, when, where } = this.props.event;
-    return (
-      <div>
+    const {
+      event: { title, when, where },
+      connectDropTarget,
+      hovered,
+      canDrop
+    } = this.props;
+
+    const dropStyle = {
+      border: `1px solid ${canDrop ? 'red' : 'black'}`,
+      backgroundColor: hovered ? 'green' : 'white'
+    };
+    return connectDropTarget(
+      <div style={dropStyle}>
         <h3>{title}</h3>
         <p>
           {where}, {when}
@@ -14,4 +25,18 @@ class SelectedEventCard extends Component {
   }
 }
 
-export default SelectedEventCard;
+const spec = {
+  drop(props, monitor) {
+    const personUid = monitor.getItem().uid;
+    const eventUid = props.event.uid;
+    console.log('---', 'event', eventUid, 'person', personUid);
+  }
+};
+
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  canDrop: monitor.canDrop(),
+  hovered: monitor.isOver()
+});
+
+export default DropTarget(['person'], spec, collect)(SelectedEventCard);
