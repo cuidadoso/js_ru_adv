@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import { reset } from 'redux-form';
 
 import { appName } from '../config';
-import { fbDataToEntities, generateId, mapToArr } from './utils';
+import { fbDataToEntities, mapToArr } from './utils';
 
 export const moduleName = 'peaple';
 export const prefix = `${appName}/${moduleName}`;
