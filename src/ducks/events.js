@@ -85,11 +85,19 @@ export const entitiesSelector = createSelector(
 export const eventListSelector = createSelector(entitiesSelector, (entities) =>
   mapToArr(entities)
 );
+export const sectionSelector = createSelector(
+  stateSelector,
+  (state) => state.selected
+);
+export const selectedEventsSelector = createSelector(
+  entitiesSelector,
+  sectionSelector,
+  (entities, selection) => selection.toArray().map((uid) => entities.get(uid))
+);
 
 /**
  * Action creators
  */
-
 export function fetchAll() {
   return {
     type: FETCH_ALL + REQUEST
