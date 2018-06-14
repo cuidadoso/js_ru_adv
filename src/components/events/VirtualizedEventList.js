@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { Table, Column, InfiniteLoader } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 
+import Trash from './Trash';
+import TableRow from './TableRow';
+
 import {
   moduleName,
   fetchLazy,
@@ -36,6 +39,8 @@ export class EventList extends Component {
     return this.props.events[index];
   };
 
+  getRowRenderer = (rowCtx) => <TableRow {...rowCtx} />;
+
   isRowLoaded = ({ index }) => index < this.props.events.length;
 
   loadMoreRows = () => {
@@ -47,32 +52,36 @@ export class EventList extends Component {
     const { loaded, events } = this.props;
     // if (loading) return <Loader />;
     return (
-      <InfiniteLoader
-        isRowLoaded={this.isRowLoaded}
-        loadMoreRows={this.loadMoreRows}
-        rowCount={
-          loaded ? this.props.events.length : this.props.events.length + 1
-        }
-      >
-        {({ onRowsRendered, registerChild }) => (
-          <Table
-            ref={registerChild}
-            height={300}
-            headerHeight={50}
-            overscanRowCount={5}
-            rowGetter={this.rowGetter}
-            rowHeight={40}
-            rowCount={events.length}
-            width={700}
-            onRowClick={this.handleRowClick}
-            onRowsRendered={onRowsRendered}
-          >
-            <Column dataKey="title" label="title" width={300} />
-            <Column dataKey="where" label="where" width={250} />
-            <Column dataKey="month" label="when" width={150} />
-          </Table>
-        )}
-      </InfiniteLoader>
+      <div>
+        <Trash />
+        <InfiniteLoader
+          isRowLoaded={this.isRowLoaded}
+          loadMoreRows={this.loadMoreRows}
+          rowCount={
+            loaded ? this.props.events.length : this.props.events.length + 1
+          }
+        >
+          {({ onRowsRendered, registerChild }) => (
+            <Table
+              ref={registerChild}
+              height={300}
+              headerHeight={50}
+              overscanRowCount={5}
+              rowGetter={this.rowGetter}
+              rowHeight={40}
+              rowCount={events.length}
+              width={700}
+              onRowClick={this.handleRowClick}
+              onRowsRendered={onRowsRendered}
+              rowRenderer={this.getRowRenderer}
+            >
+              <Column dataKey="title" label="title" width={300} />
+              <Column dataKey="where" label="where" width={250} />
+              <Column dataKey="month" label="when" width={150} />
+            </Table>
+          )}
+        </InfiniteLoader>
+      </div>
     );
   }
 
