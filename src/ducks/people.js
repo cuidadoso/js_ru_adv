@@ -1,5 +1,17 @@
 import { List, Record } from 'immutable';
-import { all, put, takeEvery, call, select } from 'redux-saga/effects';
+import {
+  all,
+  put,
+  takeEvery,
+  call,
+  select,
+  fork,
+  spawn,
+  cancel,
+  cancelled,
+  race
+} from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { createSelector } from 'reselect';
 import firebase from 'firebase';
 import { reset } from 'redux-form';
@@ -153,7 +165,32 @@ export const addEventSaga = function*(action) {
   } catch (_) {}
 };
 
+export const backgroundSyncSaga = function*() {
+  try {
+    while (true) {
+      yield call(fetchAllSaga);
+      yield delay(2000);
+    }
+  } finally {
+    if (yield cancelled()) {
+      console.log('---', 'cancelled sync saga');
+    }
+  }
+};
+
+export const cancellableSync = function*() {
+  yield race({
+    sync: backgroundSyncSaga(),
+    delay: delay(6000)
+  });
+
+  /*const task = yield fork(backgroundSyncSaga);
+  yield delay(6000);
+  yield cancel(task);*/
+};
+
 export const saga = function*() {
+  yield spawn(cancellableSync);
   yield all([
     takeEvery(ADD_PERSON_REQUEST, addPersonSaga),
     takeEvery(FETCH_ALL_REQUEST, fetchAllSaga),
