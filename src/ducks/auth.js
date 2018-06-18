@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { Record } from 'immutable';
 import { all, cps, call, put, take, takeEvery } from 'redux-saga/effects';
-// import store from '../redux'
+import { eventChannel } from 'redux-saga';
 import { push } from 'react-router-redux';
 
 import { appName } from '../config';
@@ -121,51 +121,30 @@ export const signOutSaga = function*() {
   } catch (_) {}
 };
 
-/*export function signUp({ email, password }) {
-  return (dispatch) => {
-    dispatch({
-      type: SIGN_UP_REQUEST
-    });
-    console.log('--- email', email);
-    console.log('--- password', password);
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) =>
-        dispatch({
-          type: SIGN_UP_SUCCESS,
-          payload: { user }
-        })
-      )
-      .catch((error) =>
-        dispatch({
-          type: SIGN_UP_ERROR,
-          error
-        })
-      );
-  };
-}*/
+const createAuthChannel = () =>
+  eventChannel((emit) =>
+    firebase.auth().onAuthStateChanged((user) => emit({ user }))
+  );
 
 export const watchStatusChange = function*() {
-  const auth = firebase.auth();
+  const chan = yield call(createAuthChannel);
+  while (true) {
+    const { user } = yield take(chan);
 
-  try {
-    yield cps([auth, auth.onAuthStateChanged]);
-  } catch (user) {
-    yield put({
-      type: SIGN_IN_SUCCESS,
-      payload: { user }
-    });
+    if (user) {
+      yield put({
+        type: SIGN_IN_SUCCESS,
+        payload: { user }
+      });
+    } else {
+      yield put({
+        type: SIGN_OUT_SUCCESS,
+        payload: { user }
+      });
+      yield put(push('/auth/signin'));
+    }
   }
 };
-
-firebase.auth().onAuthStateChanged((user) => {
-  const store = require('../redux').default;
-  store.dispatch({
-    type: SIGN_IN_SUCCESS,
-    payload: { user }
-  });
-});
 
 export const saga = function*() {
   yield all([
